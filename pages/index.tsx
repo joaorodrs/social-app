@@ -1,11 +1,12 @@
 import Header from "./components/Header";
+import Feed from "./components/Feed";
 
 export default function Home() {
   return (
     <div>
       <Header />
 
-      <h1>Home Page</h1>
+      <Feed />
     </div>
   )
 }

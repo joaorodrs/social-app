@@ -1,3 +1,6 @@
-.feedContainer {}
+.feedContainer {
+  background: red;
+  max-width: 600px;
+}
 
 .feedItem {}

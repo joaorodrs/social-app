@@ -1,15 +1,15 @@
-import { createMuiTheme } from '@material-ui/core/styles'
-import teal from '@material-ui/core/colors/teal'
+import { extendTheme } from '@chakra-ui/react'
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: teal[600]
+const theme = {
+  colors: {
+    brand: {
+      400: '#85eddc',
+      700: '#38B2AC',
+      800: '#2f827e'
     },
-    secondary: {
-      main: teal[600]
-    }
+    white: '#fff',
+    black: '#000'
   }
-})
+}
 
-export default theme
+export default extendTheme(theme)

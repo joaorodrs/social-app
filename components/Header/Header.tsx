@@ -1,25 +1,14 @@
-import AppBar from '@material-ui/core/AppBar'
-import IconButton from '@material-ui/core/IconButton'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-// import Button from '@material-ui/core/Button'
-
-import MenuIcon from '@material-ui/icons/Menu'
-
-import { useStyles } from './styles'
+import { HamburgerIcon } from '@chakra-ui/icons'
+import { Box, Heading, Button } from '@chakra-ui/react'
 
 const Header = () => {
-  const classes = useStyles()
-
   return (
-    <AppBar>
-      <Toolbar>
-        <IconButton>
-          <MenuIcon className={classes.menuButton} />
-        </IconButton>
-        <Typography variant="h6" className={classes.logoTitle}>Social App</Typography>
-      </Toolbar>
-    </AppBar>
+    <Box display="flex" alignItems="center" w="100%" p={4}>
+      <Button size="sm" color="brand.700">
+        <HamburgerIcon />
+      </Button>
+      <Heading marginLeft={4} as="h1" size="4x1">Social App</Heading>
+    </Box>
   )
 }
 

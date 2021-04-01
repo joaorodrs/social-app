@@ -7,7 +7,7 @@ interface HeaderProps {
 
 const Header = ({ onOpen }: HeaderProps) => {
   return (
-    <Box display="flex" alignItems="center" w="100%" p={4}>
+    <Box d="flex" alignItems="center" w="100%" p={4}>
       <IconButton
         onClick={onOpen}
         aria-label="settings"
@@ -15,14 +15,8 @@ const Header = ({ onOpen }: HeaderProps) => {
         color="brand"
         icon={<HamburgerIcon />}
       />
-      <Heading
-        marginLeft={4}
-        as="h1"
-        size="4x1"
-      >
-        Social App
-      </Heading>
-      <InputGroup marginLeft="auto" marginRight={3} width="250px">
+      <Heading ml={4} as="h1" size="4x1">Social App</Heading>
+      <InputGroup ml="auto" mr={3} w="250px">
         <Input placeholder="Pesquisar" />
         <InputRightElement>
           <IconButton aria-label="pesquisar" size="sm">

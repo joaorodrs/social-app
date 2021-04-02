@@ -81,25 +81,25 @@ const Login = () => {
         {loading
           ? <Spinner size="xl" color="brand" />
           : (
-          <Box p={5} d="flex" flexDir="column" alignItems="center" justifyContent="center">
-            <Heading variant="h2" size="lg" color="brand">Entrar</Heading>
-            <Wrap spacing={3} direction="column" mt={5}>
-              <Button w="230px" color="red.500" variant="outline" onClick={signInWithGoogle}>
-                <Icon as={FcGoogle} />
-                <div style={{ marginRight: 10 }} />
+            <Box p={5} d="flex" flexDir="column" alignItems="center" justifyContent="center">
+              <Heading variant="h2" size="lg" color="brand">Entrar</Heading>
+              <Wrap spacing={3} direction="column" mt={5}>
+                <Button w="230px" color="red.500" variant="outline" onClick={signInWithGoogle}>
+                  <Icon as={FcGoogle} />
+                  <div style={{ marginRight: 10 }} />
                 Continuar com Google
-              </Button>
-              <Button w="230px" color="black" variant="outline" onClick={signInWithGithub}>
-                <Icon as={AiFillGithub} />
-                <div style={{ marginRight: 10 }} />
+                </Button>
+                <Button w="230px" color="black" variant="outline" onClick={signInWithGithub}>
+                  <Icon as={AiFillGithub} />
+                  <div style={{ marginRight: 10 }} />
                 Continuar com Github
-              </Button>
-            </Wrap>
-            <Button mt={4} color="brand" variant="link" fontWeight="normal" size="sm" onClick={signInAnonimously}>
+                </Button>
+              </Wrap>
+              <Button mt={4} color="brand" variant="link" fontWeight="normal" size="sm" onClick={signInAnonimously}>
                 Continuar de forma anônima
                 <ViewOffIcon ml={2} />
-            </Button>
-          </Box>
+              </Button>
+            </Box>
             )}
       </Center>
     </Fade>

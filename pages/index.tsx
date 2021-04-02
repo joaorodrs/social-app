@@ -1,18 +1,19 @@
 import Header from '../components/Header'
 import Head from 'next/head'
 import Feed from '../components/Feed'
-import Drawer from 'components/Drawer'
-import { useDisclosure } from '@chakra-ui/hooks'
 import firebase from 'firebase/app'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRouter } from 'next/router'
 import { Fade } from '@chakra-ui/transition'
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
+import { useState } from 'react'
+import { Avatar } from '@chakra-ui/avatar'
 
 export default function Home () {
   const router = useRouter()
-  const { isOpen, onOpen, onClose } = useDisclosure()
   const [user, loading] = useAuthState(firebase.auth())
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false)
 
   const checkIfTheUserIsLogged = () => {
     if (!loading && user === null) {
@@ -22,6 +23,10 @@ export default function Home () {
 
   checkIfTheUserIsLogged()
 
+  const onCloseUserModal = () => {
+    setIsUserModalOpen(false)
+  }
+
   return (
     <div>
       <Head>
@@ -29,12 +34,28 @@ export default function Home () {
       </Head>
 
       <Fade in={router.isReady}>
-        <Header onOpen={onOpen} />
-
-        <Drawer isOpen={isOpen} onClose={onClose} />
+        <Header onOpenUserModal={() => setIsUserModalOpen(true)} />
 
         <Feed />
       </Fade>
+
+      <Modal isOpen={isUserModalOpen} onClose={onCloseUserModal}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader d="flex" alignItems="center">
+            <Avatar src={user?.photoURL} mr={3} />
+            {user?.displayName || 'Anônimo'}
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>{user?.email || 'Você entrou como anônimo'}</ModalBody>
+          <ModalFooter>
+            {/* <Button colorScheme="blue" mr={3} onClick={onCloseUserModal}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button> */}
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   )
 }

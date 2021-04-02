@@ -2,19 +2,23 @@ import { AtSignIcon, ChatIcon, HamburgerIcon, SearchIcon, SettingsIcon } from '@
 import { Box, Heading, IconButton, Input, InputGroup, InputRightElement, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { HiOutlineLogout } from 'react-icons/hi'
 import firebase from 'firebase/app'
+import { AiFillGithub } from 'react-icons/ai'
 interface HeaderProps {
-  onOpen(): void,
+  onOpenUserModal(): void
 }
 
-const Header = ({ onOpen }: HeaderProps) => {
+const Header = ({ onOpenUserModal }: HeaderProps) => {
   const signOut = () => {
     firebase.auth().signOut()
+  }
+
+  const navigateToGithub = () => {
+    window.open('https://github.com/joaorodrs/social-app', '_blank')
   }
 
   return (
     <Box d="flex" alignItems="center" w="100%" p={4}>
       <IconButton
-        onClick={onOpen}
         aria-label="settings"
         variant="outline"
         color="brand"
@@ -41,6 +45,7 @@ const Header = ({ onOpen }: HeaderProps) => {
         variant="ghost"
         color="brand"
         icon={<AtSignIcon />}
+        onClick={onOpenUserModal}
       />
       <Menu autoSelect={false}>
         <MenuButton as={IconButton} variant="ghost">
@@ -51,8 +56,11 @@ const Header = ({ onOpen }: HeaderProps) => {
             icon={<SettingsIcon />}
           />
         </MenuButton>
-        <MenuList onClick={signOut}>
-          <MenuItem icon={<HiOutlineLogout color="red" size={20} />} mt={2}>
+        <MenuList>
+          <MenuItem icon={<AiFillGithub color="black" size={20} />} mt={2} onClick={navigateToGithub}>
+            Ver no Github
+          </MenuItem>
+          <MenuItem icon={<HiOutlineLogout color="red" size={20} />} mt={2} onClick={signOut}>
             Sair
           </MenuItem>
         </MenuList>

@@ -1,15 +1,12 @@
 import { AtSignIcon, ChatIcon, HamburgerIcon, SearchIcon, SettingsIcon } from '@chakra-ui/icons'
-import { Box, Fade, Heading, IconButton, Input, InputGroup, InputRightElement, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
+import { Box, Heading, IconButton, Input, InputGroup, InputRightElement, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
 import { HiOutlineLogout } from 'react-icons/hi'
 import firebase from 'firebase/app'
-import { useRouter } from 'next/router'
 interface HeaderProps {
-  onOpen(): void
+  onOpen(): void,
 }
 
 const Header = ({ onOpen }: HeaderProps) => {
-  const isReady = useRouter().isReady
-
   const signOut = () => {
     firebase.auth().signOut()
   }

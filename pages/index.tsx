@@ -9,6 +9,7 @@ import firebase from 'firebase/app'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useRouter } from 'next/router'
 import { Fade } from '@chakra-ui/transition'
+import { Spinner } from '@chakra-ui/spinner'
 
 export default function Home () {
   const router = useRouter()
@@ -16,6 +17,7 @@ export default function Home () {
   const [user, loading] = useAuthState(firebase.auth())
 
   const checkIfTheUserIsLogged = () => {
+    console.log(user)
     if (!loading && user === null) {
       router.push('/login')
     }
@@ -23,7 +25,7 @@ export default function Home () {
 
   useEffect(() => {
     checkIfTheUserIsLogged()
-  }, [user])
+  }, [user, loading])
 
   return (
     <div>
@@ -32,11 +34,17 @@ export default function Home () {
       </Head>
 
       <Fade in={router.isReady}>
-        <Header onOpen={onOpen} />
+        {loading
+          ? <Spinner size="xl" />
+          : (
+          <>
+            <Header onOpen={onOpen} />
 
-        <Drawer isOpen={isOpen} onClose={onClose} />
+            <Drawer isOpen={isOpen} onClose={onClose} />
 
-        <Feed />
+            <Feed />
+          </>
+            )}
       </Fade>
     </div>
   )

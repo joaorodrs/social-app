@@ -5,6 +5,7 @@ import theme from 'config/theme'
 
 import firebaseConfig from 'config/firebase'
 import firebase from 'firebase'
+import 'firebase/auth'
 
 if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig)
 

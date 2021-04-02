@@ -1,11 +1,19 @@
 import { AtSignIcon, ChatIcon, HamburgerIcon, SearchIcon, SettingsIcon } from '@chakra-ui/icons'
-import { Box, Heading, IconButton, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
-
+import { Box, Fade, Heading, IconButton, Input, InputGroup, InputRightElement, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
+import { HiOutlineLogout } from 'react-icons/hi'
+import firebase from 'firebase/app'
+import { useRouter } from 'next/router'
 interface HeaderProps {
   onOpen(): void
 }
 
 const Header = ({ onOpen }: HeaderProps) => {
+  const isReady = useRouter().isReady
+
+  const signOut = () => {
+    firebase.auth().signOut()
+  }
+
   return (
     <Box d="flex" alignItems="center" w="100%" p={4}>
       <IconButton
@@ -37,12 +45,21 @@ const Header = ({ onOpen }: HeaderProps) => {
         color="brand"
         icon={<AtSignIcon />}
       />
-      <IconButton
-        aria-label="settings"
-        variant="ghost"
-        color="brand"
-        icon={<SettingsIcon />}
-      />
+      <Menu autoSelect={false}>
+        <MenuButton as={IconButton} variant="ghost">
+          <IconButton
+            aria-label="settings"
+            variant="ghost"
+            color="brand"
+            icon={<SettingsIcon />}
+          />
+        </MenuButton>
+        <MenuList onClick={signOut}>
+          <MenuItem icon={<HiOutlineLogout color="red" size={20} />} mt={2}>
+            Sair
+          </MenuItem>
+        </MenuList>
+      </Menu>
     </Box>
   )
 }

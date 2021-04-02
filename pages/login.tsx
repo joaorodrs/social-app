@@ -6,11 +6,21 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { FcGoogle } from 'react-icons/fc'
 import { AiFillGithub } from 'react-icons/ai'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 const Login = () => {
   const router = useRouter()
   const toast = useToast()
   const [loading, setLoading] = useState(false)
+  const [user, userLoading] = useAuthState(firebase.auth())
+
+  const checkIfTheUserIsLogged = () => {
+    if (!userLoading && user !== null) {
+      router.push('/')
+    }
+  }
+
+  checkIfTheUserIsLogged()
 
   const errorToast: UseToastOptions = {
     title: 'Erro no login',

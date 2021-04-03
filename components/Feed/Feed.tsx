@@ -1,6 +1,6 @@
 import { EditIcon } from '@chakra-ui/icons';
 import {
-  Box, Container, Flex, Heading, Input, InputGroup, InputLeftElement, InputRightElement,
+  Box, Container, Flex, Heading, IconButton, Input, InputGroup, InputLeftElement, InputRightAddon, InputRightElement,
 } from '@chakra-ui/react';
 import { IoMdPhotos } from 'react-icons/io';
 
@@ -21,7 +21,9 @@ const Feed = () => (
         <InputGroup>
           <InputLeftElement><EditIcon color="gray.400" /></InputLeftElement>
           <Input placeholder="Something here" />
-          <InputRightElement><IoMdPhotos /></InputRightElement>
+          <InputRightAddon>
+            <IconButton aria-label="Galeria" icon={<IoMdPhotos />} />
+          </InputRightAddon>
         </InputGroup>
       </Flex>
     </Box>

@@ -1,27 +1,27 @@
-module.exports = {
+export default {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
   },
   extends: [
     'plugin:react/recommended',
-    'standard',
-    'plugin:prettier/recommended'
+    'airbnb',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
     },
     ecmaVersion: 12,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   plugins: [
     'react',
-    '@typescript-eslint'
+    '@typescript-eslint',
   ],
   rules: {
+    'react/jsx-filename-extension': 'off',
+    'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/no-unused-vars': ['error']
-  }
-}
+  },
+};

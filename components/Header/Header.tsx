@@ -1,20 +1,33 @@
-import { AtSignIcon, ChatIcon, HamburgerIcon, SearchIcon, SettingsIcon } from '@chakra-ui/icons'
-import { Box, Heading, IconButton, Input, InputGroup, InputRightElement, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react'
-import { HiOutlineLogout } from 'react-icons/hi'
-import firebase from 'firebase/app'
-import { AiFillGithub } from 'react-icons/ai'
+import { ChatIcon, SearchIcon, SettingsIcon } from '@chakra-ui/icons';
+import {
+  Avatar,
+  Box,
+  Heading,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/react';
+import { HiOutlineHome, HiOutlineLogout } from 'react-icons/hi';
+import firebase from 'firebase/app';
+import { AiFillGithub } from 'react-icons/ai';
+
 interface HeaderProps {
   onOpenUserModal(): void
 }
 
 const Header = ({ onOpenUserModal }: HeaderProps) => {
   const signOut = () => {
-    firebase.auth().signOut()
-  }
+    firebase.auth().signOut();
+  };
 
   const navigateToGithub = () => {
-    window.open('https://github.com/joaorodrs/social-app', '_blank')
-  }
+    window.open('https://github.com/joaorodrs/social-app', '_blank');
+  };
 
   return (
     <Box d="flex" alignItems="center" w="100%" p={4}>
@@ -22,7 +35,7 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
         aria-label="settings"
         variant="outline"
         color="brand"
-        icon={<HamburgerIcon />}
+        icon={<HiOutlineHome size={20} />}
       />
       <Heading ml={4} as="h1" size="4x1">Social App</Heading>
       <InputGroup ml="auto" mr={3} w="250px">
@@ -44,7 +57,7 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
         aria-label="settings"
         variant="ghost"
         color="brand"
-        icon={<AtSignIcon />}
+        icon={<Avatar size="2xs" bgColor="brand" />}
         onClick={onOpenUserModal}
       />
       <Menu autoSelect={false}>
@@ -66,7 +79,7 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
         </MenuList>
       </Menu>
     </Box>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

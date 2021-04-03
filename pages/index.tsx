@@ -28,17 +28,18 @@ export default function Home () {
   }
 
   return (
-    <div>
-      <Head>
-        <title>SA | {user?.displayName || 'Anônimo'}</title>
-      </Head>
+    <>
+      <div>
+        <Head>
+          <title>SA | {user?.displayName || 'Anônimo'}</title>
+        </Head>
 
-      <Fade in={router.isReady}>
-        <Header onOpenUserModal={() => setIsUserModalOpen(true)} />
+        <Fade in={router.isReady}>
+          <Header onOpenUserModal={() => setIsUserModalOpen(true)} />
 
-        <Feed />
-      </Fade>
-
+          <Feed />
+        </Fade>
+      </div>
       <Modal isOpen={isUserModalOpen} onClose={onCloseUserModal}>
         <ModalOverlay />
         <ModalContent>
@@ -56,6 +57,6 @@ export default function Home () {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   )
 }

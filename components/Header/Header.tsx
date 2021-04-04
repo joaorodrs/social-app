@@ -30,7 +30,7 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
   };
 
   return (
-    <Box d="flex" alignItems="center" w="100%" p={4}>
+    <Box d="flex" position="fixed" bgColor="white" zIndex="overlay" boxShadow="sm" alignItems="center" w="100%" p={4}>
       <IconButton
         aria-label="settings"
         variant="outline"
@@ -39,7 +39,7 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
       />
       <Heading ml={4} as="h1" size="4x1">Social App</Heading>
       <InputGroup ml="auto" mr={3} w="250px">
-        <Input placeholder="Pesquisar" />
+        <Input placeholder="Pesquisar" focusBorderColor="brand" />
         <InputRightElement>
           <IconButton aria-label="pesquisar" size="sm">
             <SearchIcon />

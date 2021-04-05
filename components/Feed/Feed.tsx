@@ -1,25 +1,35 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/no-unresolved */
 import { EditIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box, Divider, Flex, Heading, IconButton, Input, InputGroup, InputLeftAddon, InputRightElement,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoMdPhotos } from 'react-icons/io';
+import phraseGenerator from '../../utils/phraseGenerator';
 
 const Feed = () => {
   const [postContent, setPostContent] = useState('');
   const [digits, setDigits] = useState(0);
   const [limitDigits, setLimitDigits] = useState(false);
+  const [postInputPlaceholder, setPostInputPlaceholder] = useState();
 
   const onTypePostContent = (event: { target: HTMLInputElement }) => {
     const { value } = event.target;
+    const limitIsReached = digits >= 96;
 
-    if (digits >= 10) setLimitDigits(true); else setLimitDigits(false);
+    if (limitIsReached) setLimitDigits(true); else setLimitDigits(false);
 
     setDigits(value.length);
 
+    if (limitIsReached) return setPostContent(postContent);
     return setPostContent(value);
   };
+
+  useEffect(() => {
+    setPostInputPlaceholder(() => phraseGenerator());
+  }, []);
 
   return (
     <Flex justifyContent="space-between" pt="100px">
@@ -33,7 +43,7 @@ const Feed = () => {
             <InputLeftAddon width="50px">
               {digits === 0 ? <EditIcon color="gray.500" /> : <Heading color={limitDigits ? 'red' : 'gray.500'} as="p" size="sm">{(`0${String(digits)}`).slice(-2)}</Heading>}
             </InputLeftAddon>
-            <Input value={postContent} onChange={onTypePostContent} placeholder="Something here" focusBorderColor="brand" />
+            <Input value={postContent} onChange={onTypePostContent} placeholder={postInputPlaceholder} focusBorderColor="brand" />
             <InputRightElement>
               <IconButton disabled variant="ghost" aria-label="Galeria" icon={<IoMdPhotos color="#38B2AC" />} />
             </InputRightElement>

@@ -13,7 +13,7 @@ const Feed = () => {
   const [postContent, setPostContent] = useState('');
   const [digits, setDigits] = useState(0);
   const [limitDigits, setLimitDigits] = useState(false);
-  const [postInputPlaceholder, setPostInputPlaceholder] = useState();
+  const [postInputPlaceholder, setPostInputPlaceholder] = useState('');
 
   const onTypePostContent = (event: { target: HTMLInputElement }) => {
     const { value } = event.target;
@@ -28,7 +28,7 @@ const Feed = () => {
   };
 
   useEffect(() => {
-    setPostInputPlaceholder(() => phraseGenerator());
+    setPostInputPlaceholder(phraseGenerator);
   }, []);
 
   return (

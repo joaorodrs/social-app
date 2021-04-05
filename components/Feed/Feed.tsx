@@ -21,8 +21,8 @@ const Feed = () => (
           </InputRightElement>
         </InputGroup>
         <Divider mt={5} mb={2} />
-        {[1, 2, 3, 4, 5, 6, 7].map(() => (
-          <Box border="1px solid #E2E8F0" p={5} borderRadius={5} mt={2} mb={2}>
+        {[1, 2, 3, 4, 5, 6, 7].map((number) => (
+          <Box key={number} border="1px solid #E2E8F0" p={5} borderRadius={5} mt={2} mb={2}>
             <div className="ownerInfo" style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
               <Avatar size="sm" />
               <Heading size="4x1" ml={3}>João Paulo</Heading>

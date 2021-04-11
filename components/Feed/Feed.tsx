@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   Divider,
   Flex,
+  Grid,
   Heading,
   IconButton,
   Input,
@@ -120,7 +121,7 @@ const Feed = () => {
 
   return (
     <>
-      <Flex justifyContent="space-between" pt="100px">
+      <Grid templateColumns="repeat(3, 1fr)" gap={10} pt="100px">
         <Box
           ml={20}
           border="1px solid #E2E8F0"
@@ -239,7 +240,7 @@ const Feed = () => {
             </Flex>
           ))}
         </Box>
-      </Flex>
+      </Grid>
 
       <EditPostDialog
         isOpen={openEditPost}

@@ -32,7 +32,7 @@ const ConfirmDeleteDialog = ({
         <ModalCloseButton />
         <ModalBody>
           {'"'}
-          <Tag>{post.post_content}</Tag>
+          <Tag>{post?.post_content}</Tag>
           {'"'}
         </ModalBody>
         <ModalFooter>
@@ -40,7 +40,7 @@ const ConfirmDeleteDialog = ({
             variant="outline"
             color="red.400"
             ml={3}
-            onClick={() => onDelete(post.id)}
+            onClick={() => onDelete(post?.id)}
           >
             Deletar
           </Button>

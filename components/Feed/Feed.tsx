@@ -12,6 +12,7 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightElement,
+  useMediaQuery,
 } from '@chakra-ui/react';
 import { Post } from '@types';
 import { ChangeEvent, useEffect, useState, KeyboardEvent } from 'react';
@@ -35,6 +36,8 @@ const Feed = () => {
   const [editingPost, setEditingPost] = useState<Post>();
   const [deletingPost, setDeletingPost] = useState<Post>();
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+
+  const [isMobile] = useMediaQuery('(max-width: 800px)');
 
   const getFeedPosts = async () => {
     try {
@@ -122,23 +125,29 @@ const Feed = () => {
   return (
     <>
       <Grid templateColumns="repeat(3, 1fr)" gap={10} pt="100px">
-        <Box
-          ml={20}
-          border="1px solid #E2E8F0"
-          width={60}
-          p={5}
-          borderRadius={5}
-          height="fit-content"
-        >
-          <Heading as="h2" size="4x1">
-            Hashtags
-          </Heading>
-          {[1, 2, 3, 4, 5, 6].map(number => (
-            <p key={number}>#something</p>
-          ))}
-        </Box>
-        <Box>
-          <Flex flexDir="column" w="45vw">
+        {!isMobile && (
+          <Box
+            ml={20}
+            border="1px solid #E2E8F0"
+            width={60}
+            p={5}
+            borderRadius={5}
+            height="fit-content"
+          >
+            <Heading as="h2" size="4x1">
+              Hashtags
+            </Heading>
+            {[1, 2, 3, 4, 5, 6].map(number => (
+              <p key={number}>#something</p>
+            ))}
+          </Box>
+        )}
+        <Box width={isMobile && '100vw'}>
+          <Flex
+            flexDir="column"
+            w={isMobile ? '100vw' : '45vw'}
+            px={isMobile && 6}
+          >
             <InputGroup>
               <InputLeftAddon w="50px">
                 {digits === 0 ? (
@@ -186,11 +195,11 @@ const Feed = () => {
                     flexDirection: 'row',
                   }}
                 >
-                  <Avatar size="sm" src={post.owner_photo_url} />
+                  <Avatar size="sm" src={post?.owner_photo_url} />
                   <Heading size="4x1" ml={3}>
-                    {post.owner_name}
+                    {post?.owner_name}
                   </Heading>
-                  {post.owner_id === user?.uid && (
+                  {post?.owner_id === user?.uid && (
                     <ButtonGroup ml="auto">
                       <IconButton
                         onClick={() => onEditPost(post)}
@@ -211,35 +220,37 @@ const Feed = () => {
                   )}
                 </div>
                 <div className="postContent" style={{ marginTop: 20 }}>
-                  <p>{post.post_content}</p>
+                  <p>{post?.post_content}</p>
                 </div>
               </Box>
             ))}
           </Flex>
         </Box>
-        <Box
-          mr={20}
-          w={60}
-          d="flex"
-          alignItems="center"
-          flexDir="column"
-          height="fit-content"
-          border="1px solid #E2E8F0"
-          p={5}
-          borderRadius={5}
-        >
-          {[1, 2, 3, 4, 5, 6, 7].map(number => (
-            <Flex key={number} my={5}>
-              <Avatar src="https://github.com/joaorodrs.png" mr={3} />
-              <Box>
-                <Heading as="h3" size="md">
-                  Pessoa 1
-                </Heading>
-                <p>80 followers</p>
-              </Box>
-            </Flex>
-          ))}
-        </Box>
+        {!isMobile && (
+          <Box
+            mr={20}
+            w={60}
+            d="flex"
+            alignItems="center"
+            flexDir="column"
+            height="fit-content"
+            border="1px solid #E2E8F0"
+            p={5}
+            borderRadius={5}
+          >
+            {[1, 2, 3, 4, 5, 6, 7].map(number => (
+              <Flex key={number} my={5}>
+                <Avatar src="https://github.com/joaorodrs.png" mr={3} />
+                <Box>
+                  <Heading as="h3" size="md">
+                    Pessoa 1
+                  </Heading>
+                  <p>80 followers</p>
+                </Box>
+              </Flex>
+            ))}
+          </Box>
+        )}
       </Grid>
 
       <EditPostDialog

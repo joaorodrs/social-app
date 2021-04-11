@@ -1,4 +1,4 @@
-import { ChatIcon, SearchIcon, SettingsIcon } from '@chakra-ui/icons';
+import { SearchIcon, SettingsIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box,
@@ -11,16 +11,19 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  useMediaQuery,
 } from '@chakra-ui/react';
-import { HiOutlineHome, HiOutlineLogout } from 'react-icons/hi';
+import { HiOutlineLogout } from 'react-icons/hi';
 import firebase from 'firebase/app';
 import { AiFillGithub } from 'react-icons/ai';
 
 interface HeaderProps {
-  onOpenUserModal(): void
+  onOpenUserModal(): void;
 }
 
 const Header = ({ onOpenUserModal }: HeaderProps) => {
+  const [isMobile] = useMediaQuery('(max-width: 800px)');
+
   const signOut = () => {
     firebase.auth().signOut();
   };
@@ -30,14 +33,21 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
   };
 
   return (
-    <Box d="flex" position="fixed" bgColor="white" zIndex="overlay" boxShadow="sm" alignItems="center" w="100%" p={4}>
-      <IconButton
-        aria-label="settings"
-        variant="outline"
-        color="brand"
-        icon={<HiOutlineHome size={20} />}
-      />
-      <Heading ml={4} as="h1" size="4x1">Social App</Heading>
+    <Box
+      d="flex"
+      position="fixed"
+      bgColor="white"
+      zIndex="overlay"
+      boxShadow="sm"
+      alignItems="center"
+      w="100%"
+      p={4}
+    >
+      {!isMobile && (
+        <Heading ml={4} as="h1" size="4x1">
+          Social App
+        </Heading>
+      )}
       <InputGroup ml="auto" mr={3} w="250px">
         <Input placeholder="Pesquisar" focusBorderColor="brand" />
         <InputRightElement>
@@ -46,13 +56,6 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
           </IconButton>
         </InputRightElement>
       </InputGroup>
-      <IconButton
-        aria-label="settings"
-        variant="ghost"
-        color="brand"
-        icon={<ChatIcon />}
-        disabled
-      />
       <IconButton
         aria-label="settings"
         variant="ghost"
@@ -70,10 +73,18 @@ const Header = ({ onOpenUserModal }: HeaderProps) => {
           />
         </MenuButton>
         <MenuList>
-          <MenuItem icon={<AiFillGithub color="black" size={20} />} mt={2} onClick={navigateToGithub}>
+          <MenuItem
+            icon={<AiFillGithub color="black" size={20} />}
+            mt={2}
+            onClick={navigateToGithub}
+          >
             Ver no Github
           </MenuItem>
-          <MenuItem icon={<HiOutlineLogout color="red" size={20} />} mt={2} onClick={signOut}>
+          <MenuItem
+            icon={<HiOutlineLogout color="red" size={20} />}
+            mt={2}
+            onClick={signOut}
+          >
             Sair
           </MenuItem>
         </MenuList>

@@ -21,6 +21,7 @@ import phraseGenerator from 'utils/phraseGenerator';
 import firebase from 'firebase/app';
 import { toast } from 'react-toastify';
 import EditPostDialog from 'dialogs/EditPostDialog';
+import ConfirmDeleteDialog from 'dialogs/ConfirmDeleteDialog';
 
 const Feed = () => {
   const [postContent, setPostContent] = useState('');
@@ -31,6 +32,8 @@ const Feed = () => {
   const [user] = useAuthState(firebase.auth());
   const [openEditPost, setOpenEditPost] = useState(false);
   const [editingPost, setEditingPost] = useState<Post>();
+  const [deletingPost, setDeletingPost] = useState<Post>();
+  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const getFeedPosts = async () => {
     try {
@@ -81,6 +84,8 @@ const Feed = () => {
       getFeedPosts();
     } catch (err) {
       toast.error('Não foi possível deletar a postagem.');
+    } finally {
+      setOpenConfirmDelete(false);
     }
   };
 
@@ -194,7 +199,10 @@ const Feed = () => {
                         icon={<EditIcon color="gray.500" />}
                       />
                       <IconButton
-                        onClick={() => onDeletePost(post.id)}
+                        onClick={() => {
+                          setOpenConfirmDelete(true);
+                          setDeletingPost(post);
+                        }}
                         variant="ghost"
                         aria-label="Delete"
                         icon={<DeleteIcon color="red.500" />}
@@ -238,6 +246,12 @@ const Feed = () => {
         onSubmit={onSubmitEditedPost}
         onClose={() => setOpenEditPost(false)}
         post={editingPost}
+      />
+      <ConfirmDeleteDialog
+        isOpen={openConfirmDelete}
+        onDelete={onDeletePost}
+        onClose={() => setOpenConfirmDelete(false)}
+        post={deletingPost}
       />
     </>
   );

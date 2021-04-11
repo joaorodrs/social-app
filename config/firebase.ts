@@ -5,7 +5,7 @@ const firebaseConfig = {
   storageBucket: 'social-app-3e062.appspot.com',
   messagingSenderId: '860468273345',
   appId: '1:860468273345:web:0aba824f3f0554aa91f440',
-  measurementId: 'G-P37CF8HXFC'
-}
+  measurementId: 'G-P37CF8HXFC',
+};
 
-export default firebaseConfig
+export default firebaseConfig;

@@ -10,7 +10,6 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal';
-import { Post } from '@types';
 import { useEffect, useState } from 'react';
 
 interface EditPostDialogProps {

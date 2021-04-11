@@ -9,7 +9,6 @@ import {
   ModalOverlay,
 } from '@chakra-ui/modal';
 import { Tag } from '@chakra-ui/tag';
-import { Post } from '@types';
 
 interface ConfirmDeleteDialogProps {
   isOpen: boolean;

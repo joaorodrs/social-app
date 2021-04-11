@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Avatar,
@@ -12,12 +13,10 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightElement,
-  ToastOptions,
   useMediaQuery,
   useToast,
   UseToastOptions,
 } from '@chakra-ui/react';
-import { Post } from '@types';
 import { ChangeEvent, useEffect, useState, KeyboardEvent } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { IoMdPhotos } from 'react-icons/io';

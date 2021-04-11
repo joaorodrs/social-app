@@ -1,37 +1,43 @@
-import Header from '../components/Header'
-import Head from 'next/head'
-import Feed from '../components/Feed'
-import firebase from 'firebase/app'
+import Head from 'next/head';
+import firebase from 'firebase/app';
 
-import { useAuthState } from 'react-firebase-hooks/auth'
-import { useRouter } from 'next/router'
-import { Fade } from '@chakra-ui/transition'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal'
-import { useState } from 'react'
-import { Avatar } from '@chakra-ui/avatar'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import { Fade } from '@chakra-ui/transition';
+import {
+  Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+} from '@chakra-ui/modal';
+import { useState } from 'react';
+import { Avatar } from '@chakra-ui/avatar';
+import Feed from 'components/Feed';
+import Header from 'components/Header';
 
-export default function Home () {
-  const router = useRouter()
-  const [user, loading] = useAuthState(firebase.auth())
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false)
+export default function Home() {
+  const router = useRouter();
+  const [user, loading] = useAuthState(firebase.auth());
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   const checkIfTheUserIsLogged = () => {
     if (!loading && user === null) {
-      router.push('/login')
+      router.push('/login');
     }
-  }
+  };
 
-  checkIfTheUserIsLogged()
+  checkIfTheUserIsLogged();
 
   const onCloseUserModal = () => {
-    setIsUserModalOpen(false)
-  }
+    setIsUserModalOpen(false);
+  };
 
   return (
     <>
       <div>
         <Head>
-          <title>SA | {user?.displayName || 'Anônimo'}</title>
+          <title>
+            SA |
+            {' '}
+            {user?.displayName || 'Anônimo'}
+          </title>
         </Head>
 
         <Fade in={router.isReady}>
@@ -49,14 +55,9 @@ export default function Home () {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>{user?.email || 'Você entrou como anônimo'}</ModalBody>
-          <ModalFooter>
-            {/* <Button colorScheme="blue" mr={3} onClick={onCloseUserModal}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button> */}
-          </ModalFooter>
+          <ModalFooter />
         </ModalContent>
       </Modal>
     </>
-  )
+  );
 }

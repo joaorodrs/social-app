@@ -1,21 +1,69 @@
+/* eslint-disable camelcase */
 /* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
-import { EditIcon } from '@chakra-ui/icons';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box, Divider, Flex, Heading, IconButton, Input, InputGroup, InputLeftAddon, InputRightElement,
 } from '@chakra-ui/react';
+// eslint-disable-next-line import/no-unresolved
+import { Post } from '@types';
 import { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { IoMdPhotos } from 'react-icons/io';
-import phraseGenerator from '../../utils/phraseGenerator';
+import api from 'services/api';
+import phraseGenerator from 'utils/phraseGenerator';
+import firebase from 'firebase/app';
 
 const Feed = () => {
   const [postContent, setPostContent] = useState('');
   const [digits, setDigits] = useState(0);
   const [limitDigits, setLimitDigits] = useState(false);
   const [postInputPlaceholder, setPostInputPlaceholder] = useState('');
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [user] = useAuthState(firebase.auth());
 
-  const onTypePostContent = (event: { target: HTMLInputElement }) => {
+  const getFeedPosts = async () => {
+    try {
+      const { data } = await api.get('social-post');
+
+      setPosts(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onSubmitPost = async () => {
+    const data = {
+      owner_photo_url: user.photoURL,
+      owner_name: user.displayName,
+      owner_email: user.email,
+      owner_id: user.uid,
+      post_content: postContent,
+    };
+
+    console.log('submitting post...');
+
+    try {
+      await api.post('social-post', data);
+
+      getFeedPosts();
+      setPostContent('');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onDeletePost = async (socialPostId: Post['id']) => {
+    try {
+      await api.delete(`social-post/${socialPostId}`);
+
+      getFeedPosts();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const onTypePostContent = (event) => {
     const { value } = event.target;
     const limitIsReached = digits >= 96;
 
@@ -27,8 +75,15 @@ const Feed = () => {
     return setPostContent(value);
   };
 
+  const onKeyPress = (event) => {
+    if (event.keyCode === 13 && postContent !== '') {
+      onSubmitPost();
+    }
+  };
+
   useEffect(() => {
     setPostInputPlaceholder(phraseGenerator);
+    getFeedPosts();
   }, []);
 
   return (
@@ -43,27 +98,23 @@ const Feed = () => {
             <InputLeftAddon width="50px">
               {digits === 0 ? <EditIcon color="gray.500" /> : <Heading color={limitDigits ? 'red' : 'gray.500'} as="p" size="sm">{(`0${String(digits)}`).slice(-2)}</Heading>}
             </InputLeftAddon>
-            <Input value={postContent} onChange={onTypePostContent} placeholder={postInputPlaceholder} focusBorderColor="brand" />
+            <Input value={postContent} onKeyDown={onKeyPress} onChange={onTypePostContent} placeholder={postInputPlaceholder} focusBorderColor="brand" />
             <InputRightElement>
               <IconButton disabled variant="ghost" aria-label="Galeria" icon={<IoMdPhotos color="#38B2AC" />} />
             </InputRightElement>
           </InputGroup>
           <Divider mt={5} mb={2} />
-          {[1, 2, 3, 4, 5, 6, 7].map((number) => (
-            <Box key={number} border="1px solid #E2E8F0" p={5} borderRadius={5} mt={2} mb={2}>
+          {posts.map((post) => (
+            <Box key={post.id} border="1px solid #E2E8F0" p={5} borderRadius={5} mt={2} mb={2}>
               <div className="ownerInfo" style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-                <Avatar size="sm" />
-                <Heading size="4x1" ml={3}>João Paulo</Heading>
+                <Avatar size="sm" src={post.owner_photo_url} />
+                <Heading size="4x1" ml={3}>{post.owner_name}</Heading>
+                {post.owner_id === user.uid && (
+                  <IconButton onClick={() => onDeletePost(post.id)} ml="auto" variant="ghost" aria-label="Delete" icon={<DeleteIcon color="red.500" />} />
+                )}
               </div>
               <div className="postContent" style={{ marginTop: 20 }}>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pellentesque ac
-                  nibh nec semper. Phasellus vel malesuada mauris, eget ornare enim. Suspendisse
-                  nec tempus
-                  ante. Integer et varius libero, quis condimentum metus. In vehicula non purus at
-                  hendrerit. Quisque et odio pretium, interdum odio id, dictum elit. Aenean ut
-                  egestas velit. Aliquam pharetra eros sit amet massa efficitur lobortis.
-                </p>
+                <p>{post.post_content}</p>
               </div>
             </Box>
           ))}

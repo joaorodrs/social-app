@@ -13,7 +13,7 @@ import {
   InputRightElement,
 } from '@chakra-ui/react';
 import { Post } from '@types';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState, KeyboardEvent } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { IoMdPhotos } from 'react-icons/io';
 import api from 'services/api';
@@ -94,7 +94,7 @@ const Feed = () => {
     setEditingPost(post);
   };
 
-  const onTypePostContent = event => {
+  const onTypePostContent = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     const limitIsReached = digits >= 96;
 
@@ -107,8 +107,8 @@ const Feed = () => {
     return setPostContent(value);
   };
 
-  const onPostInputKeyPress = event => {
-    if (event.keyCode === 13 && postContent !== '') {
+  const onPostInputKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === 'Enter' && postContent !== '') {
       onSubmitPost();
     }
   };
@@ -137,9 +137,9 @@ const Feed = () => {
           ))}
         </Box>
         <Box>
-          <Flex flexDir="column" width="45vw">
+          <Flex flexDir="column" w="45vw">
             <InputGroup>
-              <InputLeftAddon width="50px">
+              <InputLeftAddon w="50px">
                 {digits === 0 ? (
                   <EditIcon color="gray.500" />
                 ) : (
@@ -175,8 +175,7 @@ const Feed = () => {
                 border="1px solid #E2E8F0"
                 p={5}
                 borderRadius={5}
-                mt={2}
-                mb={2}
+                my={2}
               >
                 <div
                   className="ownerInfo"
@@ -219,7 +218,7 @@ const Feed = () => {
         </Box>
         <Box
           mr={20}
-          width={60}
+          w={60}
           d="flex"
           alignItems="center"
           flexDir="column"
@@ -229,7 +228,7 @@ const Feed = () => {
           borderRadius={5}
         >
           {[1, 2, 3, 4, 5, 6, 7].map(number => (
-            <Flex key={number} mt={5} mb={5}>
+            <Flex key={number} my={5}>
               <Avatar src="https://github.com/joaorodrs.png" mr={3} />
               <Box>
                 <Heading as="h3" size="md">
@@ -241,6 +240,7 @@ const Feed = () => {
           ))}
         </Box>
       </Flex>
+
       <EditPostDialog
         isOpen={openEditPost}
         onSubmit={onSubmitEditedPost}

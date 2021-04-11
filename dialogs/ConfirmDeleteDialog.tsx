@@ -36,9 +36,8 @@ const ConfirmDeleteDialog = ({
           {'"'}
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onClose}>Close</Button>
           <Button
-            variant="ghost"
+            variant="outline"
             color="red.400"
             ml={3}
             onClick={() => onDelete(post.id)}

@@ -12,7 +12,10 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightElement,
+  ToastOptions,
   useMediaQuery,
+  useToast,
+  UseToastOptions,
 } from '@chakra-ui/react';
 import { Post } from '@types';
 import { ChangeEvent, useEffect, useState, KeyboardEvent } from 'react';
@@ -21,7 +24,6 @@ import { IoMdPhotos } from 'react-icons/io';
 import api from 'services/api';
 import phraseGenerator from 'utils/phraseGenerator';
 import firebase from 'firebase/app';
-import { toast } from 'react-toastify';
 import EditPostDialog from 'dialogs/EditPostDialog';
 import ConfirmDeleteDialog from 'dialogs/ConfirmDeleteDialog';
 
@@ -38,6 +40,14 @@ const Feed = () => {
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const [isMobile] = useMediaQuery('(max-width: 800px)');
+  const toast = useToast();
+
+  const errorToast: UseToastOptions = {
+    title: 'Erro',
+    description: 'Houve um erro durante a ação... ;-;',
+    status: 'error',
+    isClosable: true,
+  };
 
   const getFeedPosts = async () => {
     try {
@@ -45,7 +55,7 @@ const Feed = () => {
 
       setPosts(data);
     } catch (err) {
-      toast.error('Não foi possível carregar as postagens recentes.');
+      toast(errorToast);
     }
   };
 
@@ -64,7 +74,7 @@ const Feed = () => {
       getFeedPosts();
       setPostContent('');
     } catch (err) {
-      toast.error('Não foi possível criar a postagem.');
+      toast(errorToast);
     }
   };
 
@@ -74,8 +84,7 @@ const Feed = () => {
 
       getFeedPosts();
     } catch (err) {
-      console.error(err);
-      toast.error('Não foi possível editar post');
+      toast(errorToast);
     } finally {
       setOpenEditPost(false);
     }
@@ -87,7 +96,7 @@ const Feed = () => {
 
       getFeedPosts();
     } catch (err) {
-      toast.error('Não foi possível deletar a postagem.');
+      toast(errorToast);
     } finally {
       setOpenConfirmDelete(false);
     }

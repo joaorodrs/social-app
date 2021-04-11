@@ -45,20 +45,32 @@ const EditPostDialog = ({
 
   const onPostInputKeyPress = event => {
     if (event.keyCode === 13 && postContent !== '') {
+      setDigits(0);
+      setLimitDigits(false);
+      setPostContent('');
       onSubmit({ ...post, post_content: postContent });
     }
   };
 
-  useEffect(() => {
+  const getPostData = () => {
     const postContentDigits = post?.post_content?.length;
     if (postContentDigits >= 96) setLimitDigits(true);
 
     setDigits(postContentDigits);
     setPostContent(post?.post_content);
+  };
+
+  const onModalClose = () => {
+    getPostData();
+    onClose();
+  };
+
+  useEffect(() => {
+    getPostData();
   }, [post]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onModalClose}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader d="flex" alignItems="center">

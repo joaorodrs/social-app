@@ -18,7 +18,7 @@ import firebase from 'firebase/app';
 import { AiFillGithub } from 'react-icons/ai';
 
 interface HeaderProps {
-  onOpenUserModal(): void;
+  onOpenUserModal: () => void;
 }
 
 const Header = ({ onOpenUserModal }: HeaderProps) => {

@@ -5,7 +5,13 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import { Fade } from '@chakra-ui/transition';
 import {
-  Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from '@chakra-ui/modal';
 import { useState } from 'react';
 import { Avatar } from '@chakra-ui/avatar';
@@ -33,11 +39,7 @@ export default function Home() {
     <>
       <div>
         <Head>
-          <title>
-            SA |
-            {' '}
-            {user?.displayName || 'Anônimo'}
-          </title>
+          <title>SA | {user?.displayName || 'Anônimo'}</title>
         </Head>
 
         <Fade in={router.isReady}>

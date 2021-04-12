@@ -11,10 +11,9 @@ import {
 } from '@chakra-ui/modal';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from 'firebase/app';
-import { ButtonGroup, IconButton } from '@chakra-ui/button';
+import { Button, ButtonGroup, IconButton } from '@chakra-ui/button';
 import { useEffect, useState } from 'react';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import {
   Input,
   InputGroup,
@@ -22,6 +21,15 @@ import {
   InputRightElement,
 } from '@chakra-ui/input';
 import { IoMdPhotos } from 'react-icons/io';
+import {
+  Popover,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverFooter,
+  PopoverHeader,
+  PopoverTrigger,
+} from '@chakra-ui/popover';
 
 interface PostDialogProps {
   post: Post;
@@ -39,8 +47,6 @@ const PostDialog = ({
   onClose,
 }: PostDialogProps) => {
   const [user] = useAuthState(firebase.auth());
-  const [deletingPost, setDeletingPost] = useState<Post>();
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [userEditingPost, setUserEditingPost] = useState(false);
 
   const [postContent, setPostContent] = useState('');
@@ -79,6 +85,7 @@ const PostDialog = ({
 
   const onModalClose = () => {
     getPostData();
+    setUserEditingPost(false);
     onClose();
   };
 
@@ -115,15 +122,29 @@ const PostDialog = ({
                     autoFocus={false}
                     icon={<EditIcon color="gray.500" />}
                   />
-                  <IconButton
-                    onClick={() => {
-                      setOpenConfirmDelete(true);
-                      setDeletingPost(post);
-                    }}
-                    variant="ghost"
-                    aria-label="Delete"
-                    icon={<DeleteIcon color="red.500" />}
-                  />
+                  <Popover size="sm">
+                    <PopoverTrigger>
+                      <IconButton
+                        variant="ghost"
+                        aria-label="Delete"
+                        icon={<DeleteIcon color="red.500" />}
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent w="150px">
+                      <PopoverArrow />
+                      <PopoverCloseButton />
+                      <PopoverHeader>Ahn?</PopoverHeader>
+                      <PopoverFooter d="flex" justifyContent="space-between">
+                        <Button
+                          size="sm"
+                          colorScheme="red"
+                          onClick={() => onDelete(post.id)}
+                        >
+                          Deletar
+                        </Button>
+                      </PopoverFooter>
+                    </PopoverContent>
+                  </Popover>
                 </ButtonGroup>
               )}
             </div>
@@ -167,15 +188,6 @@ const PostDialog = ({
           <ModalFooter />
         </ModalContent>
       </Modal>
-      <ConfirmDeleteDialog
-        isOpen={openConfirmDelete}
-        onDelete={postId => {
-          setOpenConfirmDelete(false);
-          onDelete(postId);
-        }}
-        onClose={() => setOpenConfirmDelete(false)}
-        post={deletingPost}
-      />
     </>
   );
 };

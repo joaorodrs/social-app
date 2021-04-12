@@ -176,6 +176,7 @@ const Feed = () => {
                 onChange={onTypePostContent}
                 placeholder={postInputPlaceholder}
                 focusBorderColor="brand"
+                disabled={user?.isAnonymous}
               />
               <InputRightElement>
                 <IconButton

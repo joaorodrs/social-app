@@ -1,9 +1,8 @@
 /* eslint-disable no-undef */
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { EditIcon } from '@chakra-ui/icons';
 import {
   Avatar,
   Box,
-  ButtonGroup,
   Divider,
   Flex,
   Grid,
@@ -23,8 +22,7 @@ import { IoMdPhotos } from 'react-icons/io';
 import api from 'services/api';
 import phraseGenerator from 'utils/phraseGenerator';
 import firebase from 'firebase/app';
-import EditPostDialog from 'dialogs/EditPostDialog';
-import ConfirmDeleteDialog from 'dialogs/ConfirmDeleteDialog';
+import Post from 'components/Post';
 
 const Feed = () => {
   const [postContent, setPostContent] = useState('');
@@ -33,10 +31,6 @@ const Feed = () => {
   const [postInputPlaceholder, setPostInputPlaceholder] = useState('');
   const [posts, setPosts] = useState<Post[]>([]);
   const [user] = useAuthState(firebase.auth());
-  const [openEditPost, setOpenEditPost] = useState(false);
-  const [editingPost, setEditingPost] = useState<Post>();
-  const [deletingPost, setDeletingPost] = useState<Post>();
-  const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
 
   const [isMobile] = useMediaQuery('(max-width: 800px)');
   const toast = useToast();
@@ -77,15 +71,13 @@ const Feed = () => {
     }
   };
 
-  const onSubmitEditedPost = async (post: Post) => {
+  const onEditPost = async (post: Post) => {
     try {
       await api.put(`social-post/${post.id}`, post);
 
       getFeedPosts();
     } catch (err) {
       toast(errorToast);
-    } finally {
-      setOpenEditPost(false);
     }
   };
 
@@ -96,14 +88,7 @@ const Feed = () => {
       getFeedPosts();
     } catch (err) {
       toast(errorToast);
-    } finally {
-      setOpenConfirmDelete(false);
     }
-  };
-
-  const onEditPost = (post: Post) => {
-    setOpenEditPost(true);
-    setEditingPost(post);
   };
 
   const onTypePostContent = (event: ChangeEvent<HTMLInputElement>) => {
@@ -189,49 +174,12 @@ const Feed = () => {
             </InputGroup>
             <Divider mt={5} mb={2} />
             {posts.map(post => (
-              <Box
+              <Post
                 key={post.id}
-                border="1px solid #E2E8F0"
-                p={5}
-                borderRadius={5}
-                my={2}
-              >
-                <div
-                  className="ownerInfo"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                  }}
-                >
-                  <Avatar size="sm" src={post?.owner_photo_url} />
-                  <Heading size="4x1" ml={3}>
-                    {post?.owner_name}
-                  </Heading>
-                  {post?.owner_id === user?.uid && (
-                    <ButtonGroup ml="auto">
-                      <IconButton
-                        onClick={() => onEditPost(post)}
-                        variant="ghost"
-                        aria-label="Edit"
-                        icon={<EditIcon color="gray.500" />}
-                      />
-                      <IconButton
-                        onClick={() => {
-                          setOpenConfirmDelete(true);
-                          setDeletingPost(post);
-                        }}
-                        variant="ghost"
-                        aria-label="Delete"
-                        icon={<DeleteIcon color="red.500" />}
-                      />
-                    </ButtonGroup>
-                  )}
-                </div>
-                <div className="postContent" style={{ marginTop: 20 }}>
-                  <p>{post?.post_content}</p>
-                </div>
-              </Box>
+                post={post}
+                onEdit={onEditPost}
+                onDelete={onDeletePost}
+              />
             ))}
           </Flex>
         </Box>
@@ -261,19 +209,6 @@ const Feed = () => {
           </Box>
         )}
       </Grid>
-
-      <EditPostDialog
-        isOpen={openEditPost}
-        onSubmit={onSubmitEditedPost}
-        onClose={() => setOpenEditPost(false)}
-        post={editingPost}
-      />
-      <ConfirmDeleteDialog
-        isOpen={openConfirmDelete}
-        onDelete={onDeletePost}
-        onClose={() => setOpenConfirmDelete(false)}
-        post={deletingPost}
-      />
     </>
   );
 };

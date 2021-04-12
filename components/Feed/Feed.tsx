@@ -22,7 +22,6 @@ import { IoMdPhotos } from 'react-icons/io';
 import api from 'services/api';
 import phraseGenerator from 'utils/phraseGenerator';
 import firebase from 'firebase/app';
-import EditPostDialog from 'dialogs/EditPostDialog';
 import Post from 'components/Post';
 
 const Feed = () => {
@@ -32,8 +31,6 @@ const Feed = () => {
   const [postInputPlaceholder, setPostInputPlaceholder] = useState('');
   const [posts, setPosts] = useState<Post[]>([]);
   const [user] = useAuthState(firebase.auth());
-  const [openEditPost, setOpenEditPost] = useState(false);
-  const [editingPost, setEditingPost] = useState<Post>();
 
   const [isMobile] = useMediaQuery('(max-width: 800px)');
   const toast = useToast();
@@ -74,15 +71,13 @@ const Feed = () => {
     }
   };
 
-  const onSubmitEditedPost = async (post: Post) => {
+  const onEditPost = async (post: Post) => {
     try {
       await api.put(`social-post/${post.id}`, post);
 
       getFeedPosts();
     } catch (err) {
       toast(errorToast);
-    } finally {
-      setOpenEditPost(false);
     }
   };
 
@@ -94,11 +89,6 @@ const Feed = () => {
     } catch (err) {
       toast(errorToast);
     }
-  };
-
-  const onEditPost = (post: Post) => {
-    setOpenEditPost(true);
-    setEditingPost(post);
   };
 
   const onTypePostContent = (event: ChangeEvent<HTMLInputElement>) => {
@@ -219,13 +209,6 @@ const Feed = () => {
           </Box>
         )}
       </Grid>
-
-      <EditPostDialog
-        isOpen={openEditPost}
-        onSubmit={onSubmitEditedPost}
-        onClose={() => setOpenEditPost(false)}
-        post={editingPost}
-      />
     </>
   );
 };

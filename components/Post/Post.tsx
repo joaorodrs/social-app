@@ -21,6 +21,7 @@ const Post = ({ post, onEdit, onDelete }: PostComponentProps) => {
         borderRadius={5}
         my={2}
         onClick={() => setOpenPostDialog(true)}
+        cursor="pointer"
       >
         <div
           className="ownerInfo"
@@ -44,7 +45,10 @@ const Post = ({ post, onEdit, onDelete }: PostComponentProps) => {
         isOpen={openPostDialog}
         onClose={() => setOpenPostDialog(false)}
         post={post}
-        onEdit={onEdit}
+        onEdit={post => {
+          setOpenPostDialog(false);
+          onEdit(post);
+        }}
         onDelete={onDelete}
       />
     </>

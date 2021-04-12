@@ -12,9 +12,16 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from 'firebase/app';
 import { ButtonGroup, IconButton } from '@chakra-ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
+import {
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightElement,
+} from '@chakra-ui/input';
+import { IoMdPhotos } from 'react-icons/io';
 
 interface PostDialogProps {
   post: Post;
@@ -34,10 +41,54 @@ const PostDialog = ({
   const [user] = useAuthState(firebase.auth());
   const [deletingPost, setDeletingPost] = useState<Post>();
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
+  const [userEditingPost, setUserEditingPost] = useState(false);
+
+  const [postContent, setPostContent] = useState('');
+  const [digits, setDigits] = useState(0);
+  const [limitDigits, setLimitDigits] = useState(false);
+
+  const onTypePostContent = event => {
+    const { value } = event.target;
+    const limitIsReached = digits >= 96;
+
+    if (limitIsReached) setLimitDigits(true);
+    else setLimitDigits(false);
+
+    setDigits(value.length);
+
+    if (limitIsReached) return setPostContent(postContent);
+    return setPostContent(value);
+  };
+
+  const onPostInputKeyPress = event => {
+    if (event.keyCode === 13 && postContent !== '') {
+      setDigits(0);
+      setLimitDigits(false);
+      setPostContent('');
+      onEdit({ ...post, post_content: postContent });
+    }
+  };
+
+  const getPostData = () => {
+    const postContentDigits = post?.post_content?.length;
+    if (postContentDigits >= 96) setLimitDigits(true);
+
+    setDigits(postContentDigits);
+    setPostContent(post?.post_content);
+  };
+
+  const onModalClose = () => {
+    getPostData();
+    onClose();
+  };
+
+  useEffect(() => {
+    getPostData();
+  }, [post]);
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onModalClose}>
         <ModalOverlay />
         <ModalCloseButton />
         <ModalContent>
@@ -58,7 +109,7 @@ const PostDialog = ({
               {post?.owner_id === user?.uid && (
                 <ButtonGroup ml="auto">
                   <IconButton
-                    onClick={() => onEdit(post)}
+                    onClick={() => setUserEditingPost(true)}
                     variant="ghost"
                     aria-label="Edit"
                     autoFocus={false}
@@ -77,7 +128,40 @@ const PostDialog = ({
               )}
             </div>
             <div className="postContent" style={{ marginTop: 20 }}>
-              <p>{post?.post_content}</p>
+              {userEditingPost ? (
+                <InputGroup>
+                  <InputLeftAddon w="50px">
+                    {digits === 0 ? (
+                      <EditIcon color="gray.500" />
+                    ) : (
+                      <Heading
+                        color={limitDigits ? 'red' : 'gray.500'}
+                        as="p"
+                        size="sm"
+                      >
+                        {`0${String(digits)}`.slice(-2)}
+                      </Heading>
+                    )}
+                  </InputLeftAddon>
+                  <Input
+                    value={postContent}
+                    onKeyDown={onPostInputKeyPress}
+                    onChange={onTypePostContent}
+                    focusBorderColor="brand"
+                    disabled={user?.isAnonymous}
+                  />
+                  <InputRightElement>
+                    <IconButton
+                      disabled
+                      variant="ghost"
+                      aria-label="Galeria"
+                      icon={<IoMdPhotos color="#38B2AC" />}
+                    />
+                  </InputRightElement>
+                </InputGroup>
+              ) : (
+                <p>{post?.post_content}</p>
+              )}
             </div>
           </ModalBody>
           <ModalFooter />
